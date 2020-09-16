@@ -1,0 +1,22 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+~$*.docx
+/node_modules
+/build
+
+# testing
+/coverage
+
+# ide
+.idea/
+.editorconfig
+/*/yarn.lock
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.idea
