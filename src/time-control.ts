@@ -22,6 +22,14 @@ export class TimeControl {
         await this.createPeriod(extra.join(' '));
         break;
       }
+      case CommandTypes.jump: {
+        await this.jump(extra[0]);
+        break;
+      }
+      case CommandTypes.ps: {
+        await this.ps();
+        break;
+      }
       default: {
         console.error(cName, 'Command not found');
       }
@@ -36,6 +44,25 @@ export class TimeControl {
 
     await this.dataManager.save(period);
     const list: TimePeriod[] = await this.dataManager.getList();
+    this.printer.printList(list);
+  }
+
+  async jump(i: string): Promise<void> {
+    const list = await this.dataManager.getList();
+    const cur: TimePeriod | undefined = list[+i];
+
+    if (!cur) {
+      throw new Error(`Element not found by index ${i}`);
+    }
+
+    cur.timestamp = new Date();
+    await this.dataManager.save(cur);
+    const newList: TimePeriod[] = await this.dataManager.getList();
+    this.printer.printList(newList);
+  }
+
+  async ps(): Promise<void> {
+    const list = await this.dataManager.getList();
     this.printer.printList(list);
   }
 }
