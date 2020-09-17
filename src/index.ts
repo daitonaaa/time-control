@@ -9,3 +9,5 @@ const dataManager = new DataManager();
 const timeControl = new TimeControl(dataManager, printer);
 
 timeControl.command(argv);
+
+

@@ -3,11 +3,10 @@ import moment from 'moment';
 
 export class Printer {
   printList(list: TimePeriod[]): void {
-    console.log(list);
     const results = list.map(period => ({
       id: period.id,
       'Наименование': period.text,
-      'Время начала': moment(period.timestamp).format('HH:MM'),
+      'Время начала': moment(period.timestamp).format('HH:mm'),
     }));
 
     console.table(results);
