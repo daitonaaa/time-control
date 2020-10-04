@@ -2,7 +2,7 @@ import { DataManager } from './data-manager';
 import { Printer } from './printer';
 import { newGuid } from './utils/guid';
 import { TimePeriod } from './time-period';
-import { CommandTypes } from './model';
+import { CommandTypes, TimePeriodList } from './model';
 
 export class TimeControl {
   constructor(
@@ -27,7 +27,11 @@ export class TimeControl {
         break;
       }
       case CommandTypes.ps: {
-        await this.ps();
+        await this.day();
+        break;
+      }
+      case CommandTypes.list: {
+        await this.list();
         break;
       }
       default: {
@@ -43,12 +47,12 @@ export class TimeControl {
     period.timestamp = new Date();
 
     await this.dataManager.save(period);
-    const list: TimePeriod[] = await this.dataManager.getList();
+    const list: TimePeriod[] = await this.dataManager.getDayData();
     this.printer.printList(list);
   }
 
   async jump(i: string): Promise<void> {
-    const list = await this.dataManager.getList();
+    const list = await this.dataManager.getDayData();
     const cur: TimePeriod | undefined = list[+i];
 
     if (!cur) {
@@ -57,12 +61,16 @@ export class TimeControl {
 
     cur.timestamp = new Date();
     await this.dataManager.save(cur);
-    const newList: TimePeriod[] = await this.dataManager.getList();
+    const newList: TimePeriod[] = await this.dataManager.getDayData();
     this.printer.printList(newList);
   }
 
-  async ps(): Promise<void> {
-    const list = await this.dataManager.getList();
+  async day(): Promise<void> {
+    const list = await this.dataManager.getDayData();
     this.printer.printList(list);
+  }
+
+  async list(): Promise<TimePeriodList> {
+    return this.dataManager.getList();
   }
 }

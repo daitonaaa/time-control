@@ -1,6 +1,12 @@
+import { TimePeriod } from './time-period';
+
 export enum CommandTypes {
   next = 'next',
-  delete = 'delete',
   jump = 'jump',
-  ps = 'ps'
+  ps = 'day',
+  list = 'list'
+}
+
+export interface TimePeriodList {
+  [day: string]: TimePeriod[];
 }
