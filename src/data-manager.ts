@@ -1,5 +1,5 @@
 import { TimePeriod } from './time-period';
-import { getJSONAllDays, getJSONFile, saveJSONDayFile } from './utils/json';
+import { generateAllDaysJSON, getJSONFile, saveJSONDayFile } from './utils/json';
 import { TimePeriodList } from './model';
 
 export class DataManager {
@@ -13,7 +13,7 @@ export class DataManager {
     return getJSONFile(new Date());
   }
 
-  getList(): Promise<TimePeriodList> {
-    return getJSONAllDays();
+  generateList(): Promise<TimePeriodList> {
+    return generateAllDaysJSON();
   }
 }

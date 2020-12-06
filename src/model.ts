@@ -4,7 +4,8 @@ export enum CommandTypes {
   next = 'next',
   jump = 'jump',
   ps = 'day',
-  list = 'list'
+  list = 'list',
+  pause = 'p',
 }
 
 export interface TimePeriodList {

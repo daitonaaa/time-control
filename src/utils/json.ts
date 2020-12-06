@@ -45,7 +45,7 @@ export const saveJSONFile = async (data: any, targetDir: string): Promise<void> 
   }
 })();
 
-export const getJSONAllDays = async (): Promise<TimePeriodList> => {
+export const generateAllDaysJSON = async (): Promise<TimePeriodList> => {
   const results = {};
   const jsons = await readDir(jsonDataFolderPath);
 
@@ -57,6 +57,6 @@ export const getJSONAllDays = async (): Promise<TimePeriodList> => {
     }
   }
 
-  await saveJSONFile(results, path.join(rootFolder, 'Documents/tm-monitor/src', 'data.json'));
+  await saveJSONFile(results, path.join(rootFolder, 'Documents/projects/tm-monitor/src', 'data.json'));
   return results;
 };

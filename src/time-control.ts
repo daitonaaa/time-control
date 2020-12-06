@@ -34,6 +34,10 @@ export class TimeControl {
         await this.list();
         break;
       }
+      case CommandTypes.pause: {
+        await this.pause();
+        break;
+      }
       default: {
         console.error(cName, 'Command not found');
       }
@@ -70,7 +74,17 @@ export class TimeControl {
     this.printer.printList(list);
   }
 
+  async pause(): Promise<void> {
+    const list = await this.dataManager.getDayData();
+    const existPause = list.findIndex(i => i.text === 'pause');
+    if (~existPause) {
+      return this.jump(existPause.toString());
+    }
+
+    return this.createPeriod('pause');
+  }
+
   async list(): Promise<TimePeriodList> {
-    return this.dataManager.getList();
+    return this.dataManager.generateList();
   }
 }
