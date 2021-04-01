@@ -21,6 +21,7 @@
     "strictNullChecks": true,
     "skipLibCheck": true,
     "outDir": "build",
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "allowJs": true
   },
 }
