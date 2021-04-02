@@ -1,9 +1,11 @@
 import { DataManager } from './data-manager';
 import { Printer } from './printer';
 import { newGuid } from './utils/guid';
+import { jsonDataFolderPath } from './utils/json';
 import { GetData } from './utils/SplitTimes';
 import { TimePeriod } from './time-period';
 import { CommandTypes, TimePeriodList } from './model';
+import fs from 'fs';
 
 export class TimeControl {
     constructor(
@@ -40,7 +42,7 @@ export class TimeControl {
                 break;
             }
             case CommandTypes.delete: {
-                this.Delete();
+                await this.Delete();
                 break;
             }
             case CommandTypes.pause: {
@@ -105,5 +107,17 @@ export class TimeControl {
         })
      
         return a;
+    }
+    Delete() {
+        
+        if (fs.existsSync(jsonDataFolderPath)) {
+            fs.readdirSync(jsonDataFolderPath).forEach(function (file) {
+                var curPath = jsonDataFolderPath + "/" + file;
+                if (!fs.lstatSync(curPath).isDirectory()) { // delete file
+                    fs.unlinkSync(curPath);
+                }
+            });
+            
+        }
     }
 }
