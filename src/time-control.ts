@@ -49,6 +49,10 @@ export class TimeControl {
                 await this.pause();
                 break;
             }
+            case CommandTypes.go: {
+                await this.go();
+                break;
+            }
             default: {
                 console.error(cName, 'Command not found');
             }
@@ -78,6 +82,10 @@ export class TimeControl {
         await this.dataManager.save(cur);
         const newList: TimePeriod[] = await this.dataManager.getDayData();
         this.printer.printList(newList);
+    }
+    async go(): Promise<void> {
+        const list = await this.dataManager.getDayData();
+        await this.jump((list.length - 2).toString());
     }
 
     async day(): Promise<void> {
@@ -113,7 +121,8 @@ export class TimeControl {
         if (fs.existsSync(jsonDataFolderPath)) {
             fs.readdirSync(jsonDataFolderPath).forEach(function (file) {
                 var curPath = jsonDataFolderPath + "/" + file;
-                if (!fs.lstatSync(curPath).isDirectory()) { // delete file
+                if (!fs.lstatSync(curPath).isDirectory()) {
+                    // delete file
                     fs.unlinkSync(curPath);
                 }
             });
