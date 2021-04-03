@@ -8,9 +8,9 @@ const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 const readDir = promisify(fs.readdir);
 
-const rootFolder = '/Users/main/';
+const rootFolder = 'B:\worktime';
 const jsonDataFolder = 'json-data';
-const jsonDataFolderPath = path.join(rootFolder, jsonDataFolder);
+export const jsonDataFolderPath = path.join(rootFolder, jsonDataFolder);
 
 const getJsonPathByName = (name: string): string => path.join(jsonDataFolderPath, `${name}.json`);
 const generateJSONFilename = (date: Date): string => `${date.getDate()}_${date.getMonth()}_${date.getFullYear()}`;
@@ -57,6 +57,6 @@ export const generateAllDaysJSON = async (): Promise<TimePeriodList> => {
     }
   }
 
-  await saveJSONFile(results, path.join(rootFolder, 'Documents/projects/tm-monitor/src', 'data.json'));
+  await saveJSONFile(results, path.join(rootFolder, '/tm-monitor/src', 'data.json'));
   return results;
 };
