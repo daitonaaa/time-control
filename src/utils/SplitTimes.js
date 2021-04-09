@@ -73,6 +73,16 @@ const addTotals = (arr) =>
 
 const parseDateKey = (key) => key.replace(/([\d]+)_([\d]+)_([\d]+)/g, '$2.$1.$3');
 
+const excludeTimestamp = (data) => data.map(item => {
+    return {
+        ...item,
+        tasks: item.tasks.map(t => {
+            delete t.timestamp;
+            return t;
+        })
+    }
+})
+
 export function GetData(json) {
     
     const jsonParsed = Object.keys(json).map(key => ({
@@ -84,5 +94,5 @@ export function GetData(json) {
     }));
 
     jsonParsed.sort((a, b) => +a.date - +b.date);
-    return R.compose(fixedEstimated, addTotals, mergeDublicates, addEstimated)(jsonParsed);
+    return R.compose(excludeTimestamp, fixedEstimated, addTotals, mergeDublicates, addEstimated)(jsonParsed);
 }
