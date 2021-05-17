@@ -111,10 +111,12 @@ export class TimeControl {
     async stats(): Promise<TimePeriodList> {
         var a: any = GetData(await this.dataManager.generateList());
 
-        a.forEach((day: any) => {            
+        a.forEach((day: any) => {
             console.table(day.tasks);
+            console.log('total estimated: ', day.totalEstimated);
+            console.log('total estimated without pause: ', day.totalEstimatedWithoutPause);
         })
-     
+
         return a;
     }
 

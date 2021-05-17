@@ -68,7 +68,13 @@ const fixedEstimated = (arr) =>
 const addTotals = (arr) =>
     arr.map(i => ({
         ...i,
-        totalEstimated: i.tasks.reduce((acc, cur) => acc += cur.estimated, 0).toFixed(1)
+        totalEstimated: i.tasks.reduce((acc, cur) => acc += cur.estimated, 0).toFixed(1),
+        totalEstimatedWithoutPause: i.tasks.reduce((acc, cur) => {
+            if (cur.text !== 'pause') {
+                acc += cur.estimated;
+            }
+            return acc;
+        }, 0).toFixed(1),
     }));
 
 const parseDateKey = (key) => key.replace(/([\d]+)_([\d]+)_([\d]+)/g, '$2.$1.$3');
@@ -84,7 +90,7 @@ const excludeTimestamp = (data) => data.map(item => {
 })
 
 export function GetData(json) {
-    
+
     const jsonParsed = Object.keys(json).map(key => ({
         date: new Date(parseDateKey(key)),
         tasks: json[key].map(d => ({
