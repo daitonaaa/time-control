@@ -8,7 +8,8 @@ export enum CommandTypes {
   pause = 'p',
   stats = 'st',
   delete = 'd',
-  go = 'go'
+  resume = 'resume',
+  raise = 'raise',
 }
 
 export interface TimePeriodList {

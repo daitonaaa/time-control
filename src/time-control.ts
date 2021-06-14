@@ -1,11 +1,9 @@
 import { DataManager } from './data-manager';
 import { Printer } from './printer';
 import { newGuid } from './utils/guid';
-import { jsonDataFolderPath } from './utils/json';
 import { GetData } from './utils/SplitTimes';
 import { TimePeriod } from './time-period';
 import { CommandTypes, TimePeriodList } from './model';
-import fs from 'fs';
 
 export class TimeControl {
     constructor(
@@ -42,16 +40,19 @@ export class TimeControl {
                 break;
             }
             case CommandTypes.delete: {
-                await this.Delete();
+                await this.delete();
                 break;
             }
             case CommandTypes.pause: {
                 await this.pause();
                 break;
             }
-            case CommandTypes.go: {
-                await this.go();
+            case CommandTypes.resume: {
+                await this.resume();
                 break;
+            }
+            case CommandTypes.raise: {
+                await this.raise(extra[0], extra[1]);
             }
             default: {
                 console.error(cName, 'Command not found');
@@ -83,7 +84,7 @@ export class TimeControl {
         const newList: TimePeriod[] = await this.dataManager.getDayData();
         this.printer.printList(newList);
     }
-    async go(): Promise<void> {
+    async resume(): Promise<void> {
         const list = await this.dataManager.getDayData();
         await this.jump((list.length - 2).toString());
     }
@@ -110,23 +111,27 @@ export class TimeControl {
     async stats(): Promise<TimePeriodList> {
         var a: any = GetData(await this.dataManager.generateList());
 
-        a.forEach((day: any) => {            
-            console.table(day.tasks);            
+        a.forEach((day: any) => {
+            console.table(day.tasks);
+            console.log('total estimated: ', day.totalEstimated);
+            console.log('total estimated without pause: ', day.totalEstimatedWithoutPause);
         })
-     
+
         return a;
     }
-    Delete() {
-        
-        if (fs.existsSync(jsonDataFolderPath)) {
-            fs.readdirSync(jsonDataFolderPath).forEach(function (file) {
-                var curPath = jsonDataFolderPath + "/" + file;
-                if (!fs.lstatSync(curPath).isDirectory()) {
-                    // delete file
-                    fs.unlinkSync(curPath);
-                }
-            });
-            
-        }
+
+    async delete() {
+        await this.dataManager.clearAll();
+    }
+
+    async raise(tid: number, unparsedTime: number) {
+        const list = await this.dataManager.getDayData();
+        const period = list[tid];
+        const [h, m] = unparsedTime.toString().split('.');
+        period.timestamp.setHours(period.timestamp.getHours() - Number(h));
+        if (m) period.timestamp.setMinutes(period.timestamp.getMinutes() - Number(m));
+
+        await this.dataManager.updatePeriod(tid, period);
+        return this.day();
     }
 }
